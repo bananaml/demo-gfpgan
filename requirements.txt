@@ -1,0 +1,11 @@
+potassium
+numpy
+lmdb
+opencv-python
+PyYAML
+tqdm
+yapf
+basicsr
+facexlib
+scipy
+realesrgan
