@@ -4,13 +4,14 @@
         {
             "name": "image",
             "type": "file",
-            "mimes": ["image/png", "image/jpeg"],
+            "mimes": ["image/jpeg"],
             "required": true
         }
     ],
     "output": {
-        "output": {
-            "type": "string",
+        "image": {
+            "type": "image",
+            "source": "base64",
             "path": "output"
         }
     }
