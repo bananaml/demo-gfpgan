@@ -4,6 +4,8 @@ import torch
 import base64
 import numpy as np
 from PIL import Image
+import requests
+import io
 from io import BytesIO
 from gfpgan import GFPGANer
 from realesrgan.utils import RealESRGANer
@@ -61,20 +63,17 @@ def handler(context: dict, request: Request) -> Response:
     print(version, scale)
     current_version = 'v1.4'
     weight = 0.5
-
     # Model, upscaler and face_enhancer
     model = context.get("model")
     upsampler = context.get("upsampler")
     face_enhancer = context.get("face_enhancer")
     output = None
     try:
-        #decode base64 of img
-        img = img.encode('utf-8')
-        img = BytesIO(base64.b64decode(img))
-        img = Image.open(img)
+        response = requests.get(img)
+        img = Image.open(BytesIO(response.content))
+        img = np.array(img)
         #cv2 read image bytes to numpy array
         img = np.array(img)
-
         if len(img.shape) == 3 and img.shape[2] == 4:
             img_mode = 'RGBA'
         elif len(img.shape) == 2:
