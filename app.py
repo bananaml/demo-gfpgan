@@ -1,10 +1,7 @@
 from potassium import Potassium, Request, Response
-import os
 import cv2
 import torch
-import shutil
 import base64
-import tempfile
 import numpy as np
 from PIL import Image
 from io import BytesIO
@@ -12,7 +9,7 @@ from gfpgan import GFPGANer
 from realesrgan.utils import RealESRGANer
 from basicsr.archs.srvgg_arch import SRVGGNetCompact
 
-app = Potassium("my_app")
+app = Potassium("gfpgan")
 
 # @app.init runs at startup, and loads models into the app's context
 @app.init
@@ -58,7 +55,7 @@ def init():
 # @app.handler runs for every call
 @app.handler("/")
 def handler(context: dict, request: Request) -> Response:
-    img = request.json.get("img")
+    img = request.json.get("image")
     version = request.json.get("version", "v1.4")
     scale = request.json.get("scale", 2)
     print(version, scale)
@@ -154,7 +151,6 @@ def handler(context: dict, request: Request) -> Response:
         output = base64.b64encode(image_bytes)
         output = output.decode('utf-8')
         print("---Output base64---")
-        # print(output)
         return Response(
             json = {"output": output}, 
             status=200
